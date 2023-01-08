@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  boards    Board[]
+  likes     Like[]
+  bookmarks Bookmark[]
+}
+
+model Board {
+  id     String @id @default(cuid())
+  title  String
+  slug   String @unique
+  color  Color
+  posts  Post[]
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([userId])
+}
+
+model Post {
+  id          String     @id @default(cuid())
+  title       String
+  description String     @db.LongText
+  image       String?
+  Board       Board      @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  boardId     String
+  likes       Like[]
+  bookmarks   Bookmark[]
+
+  @@index([boardId])
+}
+
+model Like {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+
+  @@index([userId])
+  @@index([postId])
+}
+
+model Bookmark {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+
+  @@index([userId])
+  @@index([postId])
+}
+
+enum Color {
+  CYAN
+  PURPLE
+  PINK
+  YELLOW
+}
