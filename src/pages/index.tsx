@@ -24,8 +24,8 @@ const Home: NextPage = () => {
             <p className="text-gray-600 lg:text-lg">
               Create digital boards in our app and stay organized by managing
               your ideas, projects and tasks. Each board can contain a variety
-              of posts, such as notes, images, and files, making it a versatile
-              and convenient tool.
+              of posts, such as notes, and images, making it a versatile and
+              convenient tool.
             </p>
             <div className="flex items-center justify-center space-x-2">
               <Link

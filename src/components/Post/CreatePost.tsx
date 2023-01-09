@@ -34,6 +34,7 @@ const CreatePost: FC<Props> = ({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const [isImageUploading, setIsImageUploading] = useState(false);
 
   const router = useRouter();
 
@@ -55,6 +56,7 @@ const CreatePost: FC<Props> = ({
     setTitle("");
     setDescription("");
     setImage(null);
+    setIsImageUploading(false);
     addToast({ type: "success", message });
     setIsModalOpen(false);
   };
@@ -63,6 +65,7 @@ const CreatePost: FC<Props> = ({
     onSuccess: () => handleSuccess("New post created successfully"),
     onError: (error, variables, context) => {
       setEditPostId(null);
+      setIsImageUploading(false);
       addToast({ type: "error", message: error.message });
       setIsModalOpen(false);
     },
@@ -71,6 +74,7 @@ const CreatePost: FC<Props> = ({
     onSuccess: () => handleSuccess("Post updated successfully"),
     onError: (error, variables, context) => {
       setEditPostId(null);
+      setIsImageUploading(false);
       addToast({ type: "error", message: error.message });
       setIsModalOpen(false);
     },
@@ -78,7 +82,11 @@ const CreatePost: FC<Props> = ({
 
   const handleSubmit = async () => {
     const uploadImage: () => Promise<string> = async () => {
-      if (!image) return;
+      if (!image) {
+        setIsImageUploading(false);
+        return;
+      }
+      setIsImageUploading(true);
       const formData = new FormData();
       formData.append("file", image);
       formData.append("upload_preset", env.NEXT_PUBLIC_CLOUDINARY_PRESET);
@@ -231,12 +239,15 @@ const CreatePost: FC<Props> = ({
                 disabled={
                   createPostQuery.isLoading ||
                   updatePostQuery.isLoading ||
+                  isImageUploading ||
                   title === "" ||
                   description === ""
                 }
                 className="ml-auto mt-4 block rounded-lg bg-rose-600 px-2 py-1 text-sm font-semibold text-white transition-colors active:bg-rose-700 disabled:bg-gray-400 disabled:text-gray-900 lg:mt-8 lg:px-4 lg:py-2 lg:text-base"
               >
-                {createPostQuery.isLoading || updatePostQuery.isLoading
+                {createPostQuery.isLoading ||
+                updatePostQuery.isLoading ||
+                isImageUploading
                   ? "Submitting..."
                   : `${editPostId !== null ? "Edit" : "Create"} post`}
               </button>
