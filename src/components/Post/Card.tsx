@@ -121,7 +121,11 @@ const PostCard: FC<Props> = ({
           (getBookmarkQuery.isLoading ||
           addBookmarkQuery.isLoading ||
           removeBookmarkQuery.isLoading ? (
-            <Loading className="absolute right-10 top-6 h-5 w-5 text-yellow-300" />
+            <Loading
+              className={`absolute top-6 h-5 w-5 text-yellow-300 ${
+                board ? "right-6" : "right-10"
+              }`}
+            />
           ) : bookmarkId ? (
             <BookmarkIconSolid
               onClick={() => {
