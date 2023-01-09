@@ -48,7 +48,7 @@ const Head: FC<Props> = ({ title, description, keywords, image }) => {
       <meta name="twitter:image" content={image} />
       <meta name="twitter:site" content="@vatsal0601" />
       <meta name="twitter:creator" content="@vatsal0601" />
-      <meta property="og:url" content="https://vatsalsakariya.vercel.app" />
+      <meta property="og:url" content="https://digi-wall.vercel.app" />
     </Header>
   );
 };
@@ -57,7 +57,7 @@ Head.defaultProps = {
   title: "DigiWall",
   description: "DigiWall - A Digital Wall for all your memories and tasks",
   keywords: "Digital, Wall, Digital Wall, memories, tasks",
-  image: "/android-chrome-512x512.png",
+  image: "https://digi-wall.vercel.app/android-chrome-512x512.png",
 };
 
 export default Head;
