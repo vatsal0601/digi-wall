@@ -31,11 +31,11 @@ export const postRouter = router({
       if (image)
         return ctx.prisma.post.update({
           data: { title, description, image },
-          where: { id: id },
+          where: { id },
         });
       return ctx.prisma.post.update({
         data: { title, description },
-        where: { id: id },
+        where: { id },
       });
     }),
   deletePost: protectedProcedure
@@ -53,17 +53,13 @@ export const postRouter = router({
         .strict()
     )
     .query(async ({ ctx, input: { userId, postId } }) => {
-      const likes = await ctx.prisma.like.findMany({
-        where: { postId: postId },
+      const likes = await ctx.prisma.like.count({
+        where: { postId },
       });
-      let isLikedByUser = null;
-      for (const like of likes) {
-        if (like.userId === userId) {
-          isLikedByUser = like.id;
-          break;
-        }
-      }
-      return { isLikedByUser, likes: likes.length };
+      const isLikedByUser = await ctx.prisma.like.findFirst({
+        where: { postId, userId },
+      });
+      return { isLikedByUser: isLikedByUser?.id ?? null, likes };
     }),
   addLike: protectedProcedure
     .input(
@@ -92,19 +88,15 @@ export const postRouter = router({
         .strict()
     )
     .query(async ({ ctx, input: { userId, postId } }) => {
-      const bookmarks = await ctx.prisma.bookmark.findMany({
+      const bookmarks = await ctx.prisma.bookmark.count({
         where: { postId: postId },
       });
-      let isBookmarkedByUser = null;
-      for (const bookmark of bookmarks) {
-        if (bookmark.userId === userId) {
-          isBookmarkedByUser = bookmark.id;
-          break;
-        }
-      }
+      const isBookmarkedByUser = await ctx.prisma.bookmark.findFirst({
+        where: { postId, userId },
+      });
       return {
-        isBookmarkedByUser: isBookmarkedByUser,
-        bookmarks: bookmarks.length,
+        isBookmarkedByUser: isBookmarkedByUser?.id ?? null,
+        bookmarks: bookmarks,
       };
     }),
   addBookmark: protectedProcedure
