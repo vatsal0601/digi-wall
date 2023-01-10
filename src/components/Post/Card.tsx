@@ -152,6 +152,7 @@ const PostCard: FC<Props> = ({
           <DropDown
             id={post.id}
             type="post"
+            imageUrl={post.image}
             setEditId={setEditPostId}
             setIsModalOpen={setIsModalOpen}
           />

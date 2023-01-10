@@ -1,5 +1,22 @@
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
+import { parse } from "path";
+import { TRPCError } from "@trpc/server";
+import { v2 as cloudinary } from "cloudinary";
+
+const deleteImage: (imageUrl: string) => void = async (imageUrl) => {
+  console.log("FFFF");
+  try {
+    const publicId = parse(imageUrl).name;
+    await cloudinary.uploader.destroy(`digiwall/${publicId}`);
+  } catch (err) {
+    console.log(err);
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Uploaded image could not be deleted",
+    });
+  }
+};
 
 export const postRouter = router({
   addPost: protectedProcedure
@@ -24,24 +41,40 @@ export const postRouter = router({
           title: z.string(),
           description: z.string(),
           image: z.string().url().optional(),
+          previousImageUrl: z.string().url().nullable(),
         })
         .strict()
     )
-    .mutation(({ ctx, input: { id, title, description, image } }) => {
-      if (image)
+    .mutation(
+      ({ ctx, input: { id, title, description, image, previousImageUrl } }) => {
+        if (previousImageUrl) {
+          deleteImage(previousImageUrl);
+        }
+
+        if (image)
+          return ctx.prisma.post.update({
+            data: { title, description, image },
+            where: { id },
+          });
         return ctx.prisma.post.update({
-          data: { title, description, image },
+          data: { title, description },
           where: { id },
         });
-      return ctx.prisma.post.update({
-        data: { title, description },
-        where: { id },
-      });
-    }),
+      }
+    ),
   deletePost: protectedProcedure
-    .input(z.string().cuid())
-    .mutation(({ ctx, input }) => {
-      return ctx.prisma.post.delete({ where: { id: input } });
+    .input(
+      z.object({
+        id: z.string().cuid(),
+        imageUrl: z.string().nullable(),
+      })
+    )
+    .mutation(({ ctx, input: { id, imageUrl } }) => {
+      if (imageUrl) {
+        deleteImage(imageUrl);
+      }
+
+      return ctx.prisma.post.delete({ where: { id: id } });
     }),
   getLike: protectedProcedure
     .input(

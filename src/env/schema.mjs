@@ -22,6 +22,7 @@ export const serverSchema = z.object({
   GOOGLE_ID: z.string(),
   GOOGLE_SECRET: z.string(),
   JWT_SECRET: z.string(),
+  CLOUDINARY_URL: z.string(),
 });
 
 /**

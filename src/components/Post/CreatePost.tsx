@@ -34,6 +34,7 @@ const CreatePost: FC<Props> = ({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
+  const [previousImageUrl, setPreviousImageUrl] = useState<string | null>("");
   const [isImageUploading, setIsImageUploading] = useState(false);
 
   const router = useRouter();
@@ -45,6 +46,7 @@ const CreatePost: FC<Props> = ({
       if (post.id === editPostId) {
         setTitle(post.title);
         setDescription(post.description);
+        setPreviousImageUrl(post.image);
         break;
       }
     }
@@ -108,12 +110,14 @@ const CreatePost: FC<Props> = ({
             description,
             image: imageUrl,
             id: editPostId,
+            previousImageUrl,
           });
         }
         return updatePostQuery.mutate({
           title,
           description,
           id: editPostId,
+          previousImageUrl: null,
         });
       }
       if (image) {

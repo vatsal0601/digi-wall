@@ -13,11 +13,18 @@ import type { FC, Dispatch, SetStateAction } from "react";
 interface Props {
   id: string;
   type: "board" | "post";
+  imageUrl?: string | null;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
   setEditId: Dispatch<SetStateAction<string | null>>;
 }
 
-const DropDown: FC<Props> = ({ id, type, setIsModalOpen, setEditId }) => {
+const DropDown: FC<Props> = ({
+  id,
+  type,
+  imageUrl,
+  setIsModalOpen,
+  setEditId,
+}) => {
   const router = useRouter();
   const { addToast } = useToast();
 
@@ -43,7 +50,7 @@ const DropDown: FC<Props> = ({ id, type, setIsModalOpen, setEditId }) => {
   const handleRemove: () => void = async () => {
     try {
       if (type === "board") return deleteBoardQuery.mutate(id);
-      deletePostQuery.mutate(id);
+      deletePostQuery.mutate({ id, imageUrl: imageUrl ?? null });
     } catch (err) {
       console.error(err);
     }
