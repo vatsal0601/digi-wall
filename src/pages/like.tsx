@@ -36,7 +36,7 @@ const LikePage: NextPage<Props> = ({ likes }) => {
         </h1>
         <section>
           {likes.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
+            <div className="columns-1 space-y-4 lg:columns-3 lg:space-y-8">
               {likes.map((like, index) => (
                 <PostCard
                   key={index}

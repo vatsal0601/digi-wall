@@ -30,7 +30,7 @@ const BookmarkPage: NextPage<Props> = ({ posts }) => {
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 lg:text-4xl">
           Explore
         </h1>
-        <section className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
+        <section className="columns-1 space-y-4 lg:columns-3 lg:space-y-8">
           {posts.map((post, index) => (
             <PostCard
               key={index}

@@ -79,7 +79,7 @@ const Post: NextPage<Props> = ({ id, title, color, slug, userId, posts }) => {
             </h1>
           </div>
           {posts.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
+            <div className="columns-1 space-y-4 lg:columns-3 lg:space-y-8">
               {filteredList.map((post, index) => (
                 <PostCard
                   key={index}

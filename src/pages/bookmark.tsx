@@ -36,7 +36,7 @@ const BookmarkPage: NextPage<Props> = ({ bookmarks }) => {
         </h1>
         <section>
           {bookmarks.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-8">
+            <div className="columns-1 space-y-4 lg:columns-3 lg:space-y-8">
               {bookmarks.map((bookmark, index) => (
                 <PostCard
                   key={index}

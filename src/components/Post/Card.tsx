@@ -97,7 +97,7 @@ const PostCard: FC<Props> = ({
 
   return (
     <div
-      className={`relative flex flex-col justify-between divide-y rounded-lg p-4 transition-shadow hover:shadow-md ${
+      className={`relative flex break-inside-avoid-column flex-col justify-between divide-y rounded-lg p-4 transition-shadow hover:shadow-md ${
         board ? `${getColor()}` : "divide-gray-200 bg-white"
       }`}
     >
