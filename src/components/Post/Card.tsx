@@ -43,6 +43,7 @@ const PostCard: FC<Props> = ({
         setLikeId(data.isLikedByUser);
         setLikeCount(data.likes);
       },
+      enabled: !!session?.user?.id,
     }
   );
   const addLikeQuery = trpc.post.addLike.useMutation({
@@ -65,6 +66,7 @@ const PostCard: FC<Props> = ({
       onSuccess: (data) => {
         setBookmarkId(data.isBookmarkedByUser);
       },
+      enabled: !!session?.user?.id,
     }
   );
   const addBookmarkQuery = trpc.post.addBookmark.useMutation({
